@@ -118,7 +118,7 @@ def load(project_path,    # path to project folder holding simulations
             base_ds = xr.merge([base_ds,ds])
           #else:
           #  base_ds = xr.merge([base_ds,read_var])
-        return base_ds
+      return base_ds
 
   if glob.glob(project_path+f'/*{filetype}*.nc'):
     file_path = project_path+f'/*{filetype}*.nc*'
@@ -229,7 +229,10 @@ def read(ds,var,                           # ds - netCDF dataset, var - string o
     # inputs (surface plot)   --> sliced = 'top' or some sigma level
     #  ...   (hovmoller plot) --> hov = ('top',y,x)
     if (sliced is not None or hov is not None) and ('s_win' in var_ds.dims or 's_rho' in var_ds.dims or 's_w' in var_ds.dims):
-       slice_arr = [None,-1,None,None]
+       if 's_win' not in var_ds.dims:
+         slice_arr = [None,-1,None,None]
+       else:
+         slice_arr = [None,-2,None,None]
        var_ds = slicer(var_ds,slice_arr)
 #      if sliced == 'top' or hov[0]=='top':
 #        vslice = var_ds.sizes['s_rho'] - 1
